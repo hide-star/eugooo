@@ -17,7 +17,7 @@ DEPLOY_MODE = 'github'
 
 # GitHub Pages 配置（部署到 GitHub 时修改这里）
 # 格式: https://<用户名>.github.io/<仓库名>
-GITHUB_PAGES_URL = 'https://hide-star.github.io/eugooo-share'
+GITHUB_PAGES_URL = 'https://hide-star.github.io/eugooo'
 
 # 自动获取本机局域网 IP
 def get_local_ip():
