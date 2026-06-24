@@ -10,12 +10,10 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#f5f7fa;m
 .header{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;text-align:center;padding:28px 20px;position:relative}
 .header h1{font-size:22px;margin-bottom:6px}
 .header p{font-size:13px;opacity:.85}
-.feedback-btn{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;backdrop-filter:blur(4px)}
-.feedback-btn:hover{background:rgba(255,255,255,.25)}
-.feedback-qr-wrap{position:absolute;top:52px;right:16px;background:#fff;padding:12px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.15);display:none;text-align:center;z-index:100}
-.feedback-qr-wrap canvas{width:120px;height:120px}
-.feedback-qr-wrap p{font-size:11px;color:#666;margin-top:6px}
-.feedback-btn-wrap:hover .feedback-qr-wrap{display:block}
+.feedback-bar{position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.12);padding:8px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(4px)}
+.feedback-bar canvas{width:64px;height:64px;border-radius:6px}
+.feedback-bar a{color:#fff;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap}
+.feedback-bar a:hover{text-decoration:underline}
 .grid{display:flex;flex-wrap:wrap;gap:16px;padding:20px;justify-content:center}
 .card{background:#fff;width:200px;padding:16px;border-radius:16px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.06)}
 .card .name{font-size:16px;font-weight:700;margin:8px 0;color:#222}
@@ -32,12 +30,9 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#f5f7fa;m
 <div class="header">
   <h1>EUGOOO 跨境分销平台 · 专属分享码 V7</h1>
   <p>共 21 人 · 扫码打开专属表单 · 推荐编码自动锁定 · 数据实时入库 · 2026-06-24 16:05</p>
-  <div class="feedback-btn-wrap" style="position:absolute;top:16px;right:16px">
-    <a class="feedback-btn" href="feedback.html">💬 建议反馈</a>
-    <div class="feedback-qr-wrap" id="feedbackQrWrap">
-      <canvas id="feedbackQr"></canvas>
-      <p>扫码提交反馈</p>
-    </div>
+  <div class="feedback-bar">
+    <canvas id="feedbackQr"></canvas>
+    <a href="feedback.html">微信扫码<br>建议反馈</a>
   </div>
 </div>
 <div class="edit-area" style="display:none">
@@ -179,9 +174,9 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#f5f7fa;m
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 new QRCode(document.getElementById('feedbackQr'), {
-  text: window.location.origin + window.location.pathname.replace(/index\.html$/, '') + 'feedback.html',
-  width: 120,
-  height: 120,
+  text: 'https://hide-star.github.io/eugooo/feedback.html',
+  width: 64,
+  height: 64,
   colorDark: '#1a73e8',
   colorLight: '#ffffff',
   correctLevel: QRCode.CorrectLevel.M
