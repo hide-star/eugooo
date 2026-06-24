@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EUGOOO · 数据后台</title>
+<title>EUGOOO · 反馈管理后台</title>
 <script src="config.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -47,7 +47,7 @@ tr:last-child td{border-bottom:none}
 <!-- Login Overlay -->
 <div class="login-overlay" id="loginOverlay">
   <div class="login-box">
-    <h2>数据后台登录</h2>
+    <h2>反馈管理后台登录</h2>
     <p>请输入访问密码</p>
     <input type="password" id="pwdInput" placeholder="密码" onkeydown="if(event.key==='Enter')doLogin()">
     <button onclick="doLogin()">进入后台</button>
@@ -57,8 +57,8 @@ tr:last-child td{border-bottom:none}
 
 <!-- Main Content -->
 <header>
-  <h1>EUGOOO 入驻数据后台</h1>
-  <p>实时数据 · 自动刷新 · 支持导出CSV</p>
+  <h1>EUGOOO 反馈管理后台</h1>
+  <p>实时反馈 · 自动刷新 · 支持导出CSV</p>
 </header>
 <div class="stats" id="stats"></div>
 <div class="controls">
@@ -70,9 +70,9 @@ tr:last-child td{border-bottom:none}
 <div class="table-wrap" id="tableArea"></div>
 
 <script>
-var SUBMISSIONS_URL = 'https://mantledb.sh/v2/eugooo/submissions';
+var FEEDBACK_URL = 'https://mantledb.sh/v2/eugooo/feedback';
 var DATA = [];
-var AUTH_KEY = 'eugooo_admin_auth';
+var AUTH_KEY = 'eugooo_feedback_admin_auth';
 
 // Check if already logged in
 function checkAuth(){
@@ -115,51 +115,49 @@ function doLogout(){
 
 function load(){
   document.getElementById('tableArea').innerHTML = '<div class="empty">\u52a0\u8f7d\u4e2d...</div>';
-  fetch(SUBMISSIONS_URL)
+  fetch(FEEDBACK_URL)
     .then(function(r){ return r.json(); })
     .then(function(d){
       DATA = Array.isArray(d) ? d : [];
       render();
     })
     .catch(function(){
-      document.getElementById('tableArea').innerHTML = '<div class="empty">\u52a0\u8f7d\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u6216\u5237\u65b0\u91cd\u8bd5<br><small>API: ' + SUBMISSIONS_URL + '</small></div>';
+      document.getElementById('tableArea').innerHTML = '<div class="empty">\u52a0\u8f7d\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u6216\u5237\u65b0\u91cd\u8bd5<br><small>API: ' + FEEDBACK_URL + '</small></div>';
     });
 }
 
 function render(){
-  var uniqueRef = new Set(DATA.map(function(r){ return r.refCode; })).size;
   var lastTime = DATA.length ? DATA[DATA.length-1].time : '-';
   document.getElementById('stats').innerHTML =
-    '<div class="stat"><b>' + DATA.length + '</b><br><span>\u603b\u63d0\u4ea4\u6570</span></div>' +
-    '<div class="stat"><b>' + uniqueRef + '</b><br><span>\u63a8\u8350\u4eba</span></div>' +
+    '<div class="stat"><b>' + DATA.length + '</b><br><span>\u603b\u53cd\u9988\u6570</span></div>' +
     '<div class="stat"><b>' + lastTime + '</b><br><span>\u6700\u540e\u66f4\u65b0</span></div>';
 
   if(!DATA.length){
-    document.getElementById('tableArea').innerHTML = '<div class="empty">\u6682\u65e0\u63d0\u4ea4\u6570\u636e</div>';
+    document.getElementById('tableArea').innerHTML = '<div class="empty">\u6682\u65e0\u53cd\u9988\u6570\u636e</div>';
     return;
   }
   var rows = DATA.map(function(r){
-    return '<tr><td>'+(r.refCode||'')+'</td><td>'+(r.name||'')+'</td><td>'+(r.phone||'')+'</td><td>'+(r.wechat||'')+'</td><td>'+(r.city||'')+'</td><td>'+(r.school||'')+'</td><td>'+(r.known||'')+'</td><td>'+(r.userType||'')+'</td><td>'+(r.time||'')+'</td></tr>';
+    return '<tr><td>'+(r.nickname||'')+'</td><td>'+(r.phone||'')+'</td><td>'+(r.email||'')+'</td><td>'+(r.suggestion||'')+'</td><td>'+(r.complaint||'')+'</td><td>'+(r.time||'')+'</td></tr>';
   }).join('');
   document.getElementById('tableArea').innerHTML =
-    '<table><thead><tr><th>\u63a8\u8350\u4eba\u7f16\u7801</th><th>\u59d3\u540d</th><th>\u624b\u673a\u53f7</th><th>\u5fae\u4fe1\u53f7</th><th>\u57ce\u5e02</th><th>\u5b66\u6821</th><th>\u662f\u5426\u4e86\u89e3</th><th>\u7528\u6237\u7c7b\u578b</th><th>\u65f6\u95f4</th></tr></thead><tbody>'+rows+'</tbody></table>';
+    '<table><thead><tr><th>\u6635\u79f0</th><th>\u624b\u673a\u53f7</th><th>\u90ae\u7bb1</th><th>\u5efa\u8bae</th><th>\u5410\u69fd</th><th>\u65f6\u95f4</th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
 
 function downloadCSV(){
-  var csv = '\uFEFF\u63a8\u8350\u4eba\u7f16\u7801,\u59d3\u540d,\u624b\u673a\u53f7,\u5fae\u4fe1\u53f7,\u57ce\u5e02,\u5b66\u6821,\u662f\u5426\u4e86\u89e3,\u7528\u6237\u7c7b\u578b,\u65f6\u95f4\n';
+  var csv = '\uFEFF\u6635\u79f0,\u624b\u673a\u53f7,\u90ae\u7bb1,\u5efa\u8bae,\u5410\u69fd,\u65f6\u95f4\n';
   DATA.forEach(function(r){
-    csv += [r.refCode||'', r.name||'', r.phone||'', r.wechat||'', r.city||'', r.school||'', r.known||'', r.userType||'', r.time||''].join(',') + '\n';
+    csv += [r.nickname||'', r.phone||'', r.email||'', r.suggestion||'', r.complaint||'', r.time||''].join(',') + '\n';
   });
   var blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'eugooo_submissions.csv';
+  a.download = 'eugooo_feedback.csv';
   a.click();
 }
 
 function clearData(){
-  if(!confirm('\u786e\u5b9a\u8981\u6e05\u7a7a\u6240\u6709\u63d0\u4ea4\u6570\u636e\uff1f\u6b64\u64cd\u4f5c\u4e0d\u53ef\u64a4\u9500\u3002')) return;
-  fetch(SUBMISSIONS_URL, {
+  if(!confirm('\u786e\u5b9a\u8981\u6e05\u7a7a\u6240\u6709\u53cd\u9988\u6570\u636e\uff1f\u6b64\u64cd\u4f5c\u4e0d\u53ef\u64a4\u9500\u3002')) return;
+  fetch(FEEDBACK_URL, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: '[]'

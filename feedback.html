@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EUGOOO · 建议与反馈</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#f5f7fa;min-height:100vh;color:#222}
+.header{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;text-align:center;padding:28px 20px}
+.header h1{font-size:22px;margin-bottom:6px}
+.header p{font-size:13px;opacity:.85}
+.container{max-width:480px;margin:24px auto;padding:0 16px}
+.card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card h2{font-size:18px;color:#1a73e8;margin-bottom:20px;text-align:center}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-size:13px;color:#555;margin-bottom:6px;font-weight:600}
+.form-group input,.form-group textarea{width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;outline:none;font-family:inherit}
+.form-group input:focus,.form-group textarea:focus{border-color:#1a73e8}
+.form-group textarea{min-height:100px;resize:vertical}
+.btn-submit{width:100%;padding:14px;border:none;border-radius:10px;background:#1a73e8;color:#fff;font-size:15px;font-weight:600;cursor:pointer}
+.btn-submit:hover{background:#0d47a1}
+.btn-submit:disabled{background:#999;cursor:not-allowed}
+.tip{text-align:center;color:#888;font-size:12px;margin-top:16px}
+.success-msg{color:#4caf50;text-align:center;font-size:14px;margin-top:16px;display:none}
+.error-msg{color:#e53935;text-align:center;font-size:14px;margin-top:16px;display:none}
+.back-link{display:block;text-align:center;margin-top:20px;color:#1a73e8;font-size:14px;text-decoration:none}
+.back-link:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>EUGOOO 建议与反馈</h1>
+  <p>您的每一条建议都是我们进步的动力</p>
+</div>
+<div class="container">
+  <div class="card">
+    <h2>提交您的建议或吐槽</h2>
+    <div class="form-group">
+      <label>昵称</label>
+      <input type="text" id="nickname" placeholder="请输入您的昵称">
+    </div>
+    <div class="form-group">
+      <label>手机号</label>
+      <input type="tel" id="phone" placeholder="请输入您的手机号">
+    </div>
+    <div class="form-group">
+      <label>邮箱</label>
+      <input type="email" id="email" placeholder="请输入您的邮箱">
+    </div>
+    <div class="form-group">
+      <label>您的建议</label>
+      <textarea id="suggestion" placeholder="请描述您的建议..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>您的吐槽</label>
+      <textarea id="complaint" placeholder="请描述您遇到的问题或不满意的地方..."></textarea>
+    </div>
+    <button class="btn-submit" id="submitBtn" onclick="submitFeedback()">提交反馈</button>
+    <div class="success-msg" id="successMsg">提交成功，感谢您的反馈！</div>
+    <div class="error-msg" id="errorMsg">提交失败，请检查网络后重试。</div>
+    <div class="tip">管理员查看 <a href="feedback-admin.html" target="_blank">反馈管理后台</a></div>
+  </div>
+  <a class="back-link" href="index.html">← 返回首页</a>
+</div>
+
+<script>
+var FEEDBACK_URL = 'https://mantledb.sh/v2/eugooo/feedback';
+
+function submitFeedback(){
+  var nickname = document.getElementById('nickname').value.trim();
+  var phone = document.getElementById('phone').value.trim();
+  var email = document.getElementById('email').value.trim();
+  var suggestion = document.getElementById('suggestion').value.trim();
+  var complaint = document.getElementById('complaint').value.trim();
+
+  if(!nickname){
+    alert('请输入昵称');
+    document.getElementById('nickname').focus();
+    return;
+  }
+  if(!phone){
+    alert('请输入手机号');
+    document.getElementById('phone').focus();
+    return;
+  }
+  if(!suggestion && !complaint){
+    alert('请至少填写建议或吐槽其中一项');
+    document.getElementById('suggestion').focus();
+    return;
+  }
+
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '提交中...';
+  document.getElementById('successMsg').style.display = 'none';
+  document.getElementById('errorMsg').style.display = 'none';
+
+  var entry = {
+    nickname: nickname,
+    phone: phone,
+    email: email,
+    suggestion: suggestion,
+    complaint: complaint,
+    time: new Date().toLocaleString('zh-CN')
+  };
+
+  fetch(FEEDBACK_URL, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(entry)
+  })
+    .then(function(r){
+      if(r.ok){
+        document.getElementById('successMsg').style.display = 'block';
+        document.getElementById('nickname').value = '';
+        document.getElementById('phone').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('suggestion').value = '';
+        document.getElementById('complaint').value = '';
+      } else {
+        document.getElementById('errorMsg').style.display = 'block';
+      }
+    })
+    .catch(function(){
+      document.getElementById('errorMsg').style.display = 'block';
+    })
+    .finally(function(){
+      btn.disabled = false;
+      btn.textContent = '提交反馈';
+    });
+}
+</script>
+</body>
+</html>
