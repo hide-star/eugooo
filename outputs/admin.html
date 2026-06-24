@@ -95,9 +95,12 @@ function clearData(){
     headers: {'Content-Type': 'application/json'},
     body: '[]'
   })
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      alert(d.ok ? '\u5df2\u6e05\u7a7a' : '\u6e05\u7a7a\u5931\u8d25');
+    .then(function(r){
+      if(r.ok){
+        alert('\u5df2\u6e05\u7a7a');
+      } else {
+        alert('\u6e05\u7a7a\u5931\u8d25');
+      }
       load();
     })
     .catch(function(){ alert('\u6e05\u7a7a\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc'); });
