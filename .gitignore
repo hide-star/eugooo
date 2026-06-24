@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.pyc
+
+# Node
+server/node_modules/
+
+# IDE
+.vscode/
+.workbuddy/
+
+# 备份/临时文件
+*.tar.gz
+*.rar
+
+# 旧的备份脚本
+*_backup_*.py
+build_v7.py
+build_v7_v2.py
+build_v8.py
+gen_qr.py
+github_cleanup.py
+sync_wecom.py
+sync_wecom_v1.py
+test_storage.py
+
+# 根目录不需要的文件
+DEPLOY_GUIDE.md
+Mia.jpg
+wrangler.toml
+cloudbaserc.json
+test_params.json
+test_utf8.json
+sync_state.json
+start_service.txt
+人员_v1.xlsx
+批量单人二维码.rar
+
+# server 中不需要的
+server/server_backup_v1.js
+server/server_v2.js
+server/data.json
+
+# outputs 中不需要的
+outputs/admin_v1.html
+outputs/admin_v2.html
+outputs/人员.xlsx
+outputs/local_qrcodes/
+outputs/github_qrcodes/
+outputs/cards/Clara.jpg
+outputs/cards/Fiona.jpg
+outputs/cards/Jasper.jpg
+outputs/cards/Mia.jpg
+
+# 企业微信名片中不需要的
+企业微信名片/批量单人二维码/
+企业微信名片/Fiona.jpg
+企业微信名片/Clara.jpg
+企业微信名片/Mia.jpg
+企业微信名片/Jasper.jpg
+
+# 二维码备份
+二维码/backup/
