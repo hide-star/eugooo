@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EUGOOO · 数据后台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#f5f7fa;min-height:100vh;color:#222}
+header{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;padding:20px;text-align:center}
+header h1{font-size:20px;margin-bottom:4px}
+header p{font-size:13px;opacity:.85}
+.stats{display:flex;gap:12px;padding:16px;flex-wrap:wrap}
+.stat{flex:1;min-width:80px;background:#fff;border-radius:12px;padding:16px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.stat b{font-size:28px;color:#1a73e8;display:block}
+.stat span{font-size:12px;color:#888;margin-top:4px;display:block}
+.controls{padding:0 16px 12px;display:flex;gap:10px;flex-wrap:wrap}
+.controls button{padding:10px 20px;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600}
+.btn-refresh{background:#1a73e8;color:#fff}
+.btn-csv{background:#4caf50;color:#fff}
+.btn-clear{background:#e53935;color:#fff}
+.table-wrap{overflow-x:auto;padding:0 16px 16px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);font-size:13px}
+th,td{padding:10px 8px;text-align:left;border-bottom:1px solid #eee;white-space:nowrap}
+th{background:#f0f4ff;color:#1a73e8;font-weight:600;position:sticky;top:0}
+tr:last-child td{border-bottom:none}
+.empty{padding:40px;text-align:center;color:#999;font-size:15px}
+</style>
+</head>
+<body>
+<header>
+  <h1>EUGOOO 入驻数据后台</h1>
+  <p>实时数据 · 自动刷新 · 支持导出CSV</p>
+</header>
+<div class="stats" id="stats"></div>
+<div class="controls">
+  <button class="btn-refresh" onclick="load()">刷新数据</button>
+  <button class="btn-csv" onclick="downloadCSV()">导出 CSV</button>
+  <button class="btn-clear" onclick="clearData()">清空数据</button>
+</div>
+<div class="table-wrap" id="tableArea"></div>
+
+<script>
+var SUBMISSIONS_URL = 'https://mantledb.sh/v2/eugooo/submissions';
+var DATA = [];
+
+function load(){
+  document.getElementById('tableArea').innerHTML = '<div class="empty">\u52a0\u8f7d\u4e2d...</div>';
+  fetch(SUBMISSIONS_URL)
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      DATA = Array.isArray(d) ? d : [];
+      render();
+    })
+    .catch(function(){
+      document.getElementById('tableArea').innerHTML = '<div class="empty">\u52a0\u8f7d\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u6216\u5237\u65b0\u91cd\u8bd5<br><small>API: ' + SUBMISSIONS_URL + '</small></div>';
+    });
+}
+
+function render(){
+  var uniqueRef = new Set(DATA.map(function(r){ return r.refCode; })).size;
+  var lastTime = DATA.length ? DATA[DATA.length-1].time : '-';
+  document.getElementById('stats').innerHTML =
+    '<div class="stat"><b>' + DATA.length + '</b><br><span>\u603b\u63d0\u4ea4\u6570</span></div>' +
+    '<div class="stat"><b>' + uniqueRef + '</b><br><span>\u63a8\u8350\u4eba</span></div>' +
+    '<div class="stat"><b>' + lastTime + '</b><br><span>\u6700\u540e\u66f4\u65b0</span></div>';
+
+  if(!DATA.length){
+    document.getElementById('tableArea').innerHTML = '<div class="empty">\u6682\u65e0\u63d0\u4ea4\u6570\u636e</div>';
+    return;
+  }
+  var rows = DATA.map(function(r){
+    return '<tr><td>'+(r.refCode||'')+'</td><td>'+(r.name||'')+'</td><td>'+(r.phone||'')+'</td><td>'+(r.wechat||'')+'</td><td>'+(r.city||'')+'</td><td>'+(r.school||'')+'</td><td>'+(r.known||'')+'</td><td>'+(r.userType||'')+'</td><td>'+(r.time||'')+'</td></tr>';
+  }).join('');
+  document.getElementById('tableArea').innerHTML =
+    '<table><thead><tr><th>\u63a8\u8350\u4eba\u7f16\u7801</th><th>\u59d3\u540d</th><th>\u624b\u673a\u53f7</th><th>\u5fae\u4fe1\u53f7</th><th>\u57ce\u5e02</th><th>\u5b66\u6821</th><th>\u662f\u5426\u4e86\u89e3</th><th>\u7528\u6237\u7c7b\u578b</th><th>\u65f6\u95f4</th></tr></thead><tbody>'+rows+'</tbody></table>';
+}
+
+function downloadCSV(){
+  var csv = '\uFEFF\u63a8\u8350\u4eba\u7f16\u7801,\u59d3\u540d,\u624b\u673a\u53f7,\u5fae\u4fe1\u53f7,\u57ce\u5e02,\u5b66\u6821,\u662f\u5426\u4e86\u89e3,\u7528\u6237\u7c7b\u578b,\u65f6\u95f4\n';
+  DATA.forEach(function(r){
+    csv += [r.refCode||'', r.name||'', r.phone||'', r.wechat||'', r.city||'', r.school||'', r.known||'', r.userType||'', r.time||''].join(',') + '\n';
+  });
+  var blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'eugooo_submissions.csv';
+  a.click();
+}
+
+function clearData(){
+  if(!confirm('\u786e\u5b9a\u8981\u6e05\u7a7a\u6240\u6709\u63d0\u4ea4\u6570\u636e\uff1f\u6b64\u64cd\u4f5c\u4e0d\u53ef\u64a4\u9500\u3002')) return;
+  fetch(SUBMISSIONS_URL, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: '[]'
+  })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      alert(d.ok ? '\u5df2\u6e05\u7a7a' : '\u6e05\u7a7a\u5931\u8d25');
+      load();
+    })
+    .catch(function(){ alert('\u6e05\u7a7a\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc'); });
+}
+
+load();
+setInterval(load, 30000);
+</script>
+</body>
+</html>

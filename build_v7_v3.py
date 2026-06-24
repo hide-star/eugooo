@@ -3,7 +3,8 @@ import openpyxl, qrcode, json, os, re, shutil, socket
 # 以脚本所在目录为基准，全部使用相对路径，便于迁移到服务器或 GitHub
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 EXCEL = os.path.join(BASE_DIR, '人员.xlsx')
-OUT = os.path.join(BASE_DIR, 'outputs')
+# GitHub Pages 部署：HTML 直接生成到根目录
+OUT = BASE_DIR
 QR_DIR = os.path.join(OUT, 'qrcodes')
 CARD_DIR = os.path.join(OUT, 'cards')
 CARDS_SRC = os.path.join(BASE_DIR, '企业微信名片')
@@ -47,12 +48,23 @@ available_cards = {}
 if os.path.exists(CARDS_SRC):
     for f in os.listdir(CARDS_SRC):
         if f.lower().endswith(('.jpg', '.jpeg', '.png')):
-            name = os.path.splitext(f)[0]
+            # 支持 "姓名.jpg" 或 "编号_姓名.jpg" 两种命名格式
+            name_no_ext = os.path.splitext(f)[0]
+            # 如果是 "编号_姓名" 格式，提取姓名部分
+            if '_' in name_no_ext:
+                parts = name_no_ext.split('_')
+                # 如果第一部分是纯数字，则取后面部分作为姓名
+                if parts[0].isdigit():
+                    name = '_'.join(parts[1:])
+                else:
+                    name = name_no_ext
+            else:
+                name = name_no_ext
             src_path = os.path.join(CARDS_SRC, f)
             dst_path = os.path.join(CARD_DIR, f)
             shutil.copy2(src_path, dst_path)
             available_cards[name] = f'cards/{f}'
-            print(f'  Card: {f}')
+            print(f'  Card: {f} -> name="{name}"')
 
 wb = openpyxl.load_workbook(EXCEL, data_only=True)
 ws = wb['Sheet1']

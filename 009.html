@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>王金田 · EUGOOO 入驻</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:linear-gradient(180deg,#e8f0fe 0%,#f5f7fa 40%);min-height:100vh;color:#222;padding-bottom:40px}
+.top{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;text-align:center;padding:32px 20px 24px;border-radius:0 0 24px 24px}
+.top .label{font-size:13px;opacity:.85;margin-bottom:4px}
+.top h2{font-size:22px;margin-bottom:6px}
+.top .ref{font-size:14px;opacity:.9}
+.top .ref strong{font-size:22px;display:block;margin-top:4px;letter-spacing:4px}
+.card{background:#fff;margin:16px;border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card h3{font-size:16px;color:#1a73e8;margin-bottom:10px}
+.card .msg{white-space:pre-wrap;color:#555;font-size:13px;line-height:1.8;max-height:200px;overflow-y:auto;background:#f8faff;padding:12px;border-radius:8px}
+.card-script{display:flex;gap:14px;align-items:flex-start}
+.card-script>.wecom-col{flex:0 0 100px;text-align:center}
+.card-script>.wecom-col img{width:100px;height:auto;border-radius:8px;display:block}
+.card-script>.wecom-col .cname{font-size:12px;font-weight:700;color:#2e7d32;margin-top:4px}
+.card-script>.wecom-col .cdesc{font-size:10px;color:#888;margin-top:1px}
+.card-script>.script-col{flex:1;min-width:0}
+@media (max-width:450px){.card-script{flex-direction:column}}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:14px;color:#555;margin-bottom:6px}
+.field label .req{color:#e53935}
+.field input,.field select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;font-size:15px;background:#fafafa;-webkit-appearance:none}
+.field input:focus,.field select:focus{outline:none;border-color:#1a73e8;background:#fff}
+.field .locked{background:#e8f0fe;color:#1a73e8;font-weight:700;border-color:#1a73e8}
+.submit-btn{width:100%;background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;border:none;padding:16px;border-radius:12px;font-size:18px;font-weight:700;cursor:pointer;margin-top:8px;-webkit-appearance:none}
+.submit-btn:active{opacity:.85}
+.submit-btn:disabled{opacity:.6}
+.result{text-align:center;padding:16px;margin:16px;border-radius:12px;display:none;font-size:15px;line-height:1.6}
+.result.ok{background:#e8f5e9;color:#2e7d32;display:block}
+.result.err{background:#fce4ec;color:#c62828;display:block}
+.result.loading{background:#e3f2fd;color:#1565c0;display:block}
+.wecom-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.wecom-modal.active{display:flex}
+.wecom-modal .box{background:#fff;border-radius:16px;padding:24px;text-align:center;max-width:340px;width:100%}
+.wecom-modal .box h3{color:#1a73e8;margin-bottom:12px;font-size:18px}
+.wecom-modal .box img{width:220px;height:auto;border-radius:8px;margin:8px 0}
+.wecom-modal .box .tip{color:#666;font-size:13px;margin-bottom:16px}
+.wecom-modal .box .btn{display:inline-block;background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;padding:12px 32px;border-radius:10px;text-decoration:none;font-size:15px;font-weight:700;cursor:pointer;border:none}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="label">推荐人：王金田</div>
+  <h2>EUGOOO 入驻申请表</h2>
+  <div class="ref">推荐编码已自动锁定 <strong>009</strong></div>
+</div>
+
+<div class="card card-script"><div class="wecom-col"><img src="cards/009_王金田.jpg" alt="王金田企业微信"><div class="cname">王金田</div><div class="cdesc">扫码添加企业微信</div></div><div class="script-col"><h3>推广话术</h3><div class="msg">【大学生创业招募】大学四年，除了绩点，还能攒下什么？<br>一台电脑，课余时间，做跨境生意。<br>不用囤货，不用仓库，供应商帮你一件代发到全球。<br>EUGOOO 跨境分销平台 · 大学生创业计划<br>零库存，零门槛，18大品类万款货源<br>对接 Amazon / TEMU / TikTok / SHEIN 等平台<br>扫码入驻，开始你的第一笔跨境订单 →<br>我是王金田，推荐你参加 eugooo.com 平台创业项目！零成本开店，平台全程带教。<br>请点击链接填写报名表，在"推荐人编码"一栏填写 009 即可。<br>报名链接：</div></div></div>
+
+<div class="card">
+  <h3>填写入驻信息</h3>
+  <form id="regForm">
+    <div class="field">
+      <label>推荐人编码（自动锁定）</label>
+      <input type="text" value="009" readonly class="locked" id="refCode">
+    </div>
+    <div class="field">
+      <label><span class="req">*</span> 姓名</label>
+      <input type="text" id="fName" required placeholder="请输入姓名">
+    </div>
+    <div class="field">
+      <label><span class="req">*</span> 手机号</label>
+      <input type="tel" id="fPhone" required placeholder="请输入手机号">
+    </div>
+    <div class="field">
+      <label>微信号</label>
+      <input type="text" id="fWechat" placeholder="请输入微信号">
+    </div>
+    <div class="field">
+      <label>所在城市</label>
+      <input type="text" id="fCity" placeholder="请输入所在城市">
+    </div>
+    <div class="field">
+      <label>所在学校</label>
+      <input type="text" id="fSchool" placeholder="请输入学校名称">
+    </div>
+    <div class="field">
+      <label>是否已了解 eugooo.com 平台</label>
+      <select id="fKnown">
+        <option value="">请选择</option>
+        <option value="是">是</option>
+        <option value="否">否</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>用户类型</label>
+      <select id="fUserType">
+        <option value="">请选择</option>
+        <option value="微信用户">微信用户</option>
+        <option value="大学生">大学生</option>
+        <option value="创业者">创业者</option>
+        <option value="其他">其他</option>
+      </select>
+    </div>
+    <button type="button" class="submit-btn" id="submitBtn" onclick="doSubmit()">提交入驻申请</button>
+  </form>
+</div>
+
+<div class="result" id="result"></div>
+
+<div class="wecom-modal" id="wecomModal">
+  <div class="box">
+    <h3>🎉 提交成功！</h3>
+    <div class="tip">请长按二维码识别，添加 <strong>王金田</strong> 的企业微信</div>
+    <img src="cards/009_王金田.jpg" alt="王金田企业微信">
+    <button class="btn" onclick="closeWecomModal()">我知道了</button>
+  </div>
+</div>
+
+<script>
+var SUBMITTING = false;
+var SUBMISSIONS_URL = 'https://mantledb.sh/v2/eugooo/submissions';
+
+function showResult(cls, msg){
+  var r = document.getElementById('result');
+  r.className = 'result ' + cls;
+  r.textContent = msg;
+}
+
+function openWecomModal(){
+  document.getElementById('wecomModal').classList.add('active');
+}
+
+function closeWecomModal(){
+  document.getElementById('wecomModal').classList.remove('active');
+}
+
+function doSubmit(){
+  if(SUBMITTING) return;
+  var n = document.getElementById('fName').value.trim();
+  var p = document.getElementById('fPhone').value.trim();
+  if(!n || !p){ alert('\u8bf7\u81f3\u5c11\u586b\u5199\u59d3\u540d\u548c\u624b\u673a\u53f7'); return; }
+
+  SUBMITTING = true;
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '\u63d0\u4ea4\u4e2d...';
+  showResult('loading', '\u6b63\u5728\u63d0\u4ea4\uff0c\u8bf7\u7a0d\u5019...');
+
+  var entry = {
+    refCode: document.getElementById('refCode').value,
+    name: n,
+    phone: p,
+    wechat: document.getElementById('fWechat').value.trim(),
+    city: document.getElementById('fCity').value.trim(),
+    school: document.getElementById('fSchool').value.trim(),
+    known: document.getElementById('fKnown').value,
+    userType: document.getElementById('fUserType').value,
+    time: new Date().toLocaleString('zh-CN', {timeZone:'Asia/Shanghai'})
+  };
+
+  fetch(SUBMISSIONS_URL)
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(!Array.isArray(data)) data = [];
+      data.push(entry);
+      return fetch(SUBMISSIONS_URL, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(){
+      showResult('ok', '\u63d0\u4ea4\u6210\u529f\uff01\n\u63a8\u8350\u4eba\u7f16\u7801 009 \u5df2\u81ea\u52a8\u8bb0\u5f55\u3002\n\u6b22\u8fce\u52a0\u5165 EUGOOO\uff01');
+      document.getElementById('regForm').style.display = 'none';
+      SUBMITTING = false;
+      btn.disabled = false;
+      btn.textContent = '\u63d0\u4ea4\u5165\u9a7b\u7533\u8bf7';
+      openWecomModal();
+    })
+    .catch(function(){
+      SUBMITTING = false;
+      btn.disabled = false;
+      btn.textContent = '\u63d0\u4ea4\u5165\u9a7b\u7533\u8bf7';
+      showResult('err', '\u63d0\u4ea4\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u540e\u91cd\u8bd5');
+    });
+}
+</script>
+</body>
+</html>
