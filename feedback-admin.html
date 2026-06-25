@@ -115,7 +115,7 @@ function doLogout(){
 
 function load(){
   document.getElementById('tableArea').innerHTML = '<div class="empty">\u52a0\u8f7d\u4e2d...</div>';
-  fetch(FEEDBACK_URL)
+  fetch(FEEDBACK_URL + '?t=' + Date.now())
     .then(function(r){ return r.json(); })
     .then(function(d){
       DATA = Array.isArray(d) ? d : [];

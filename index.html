@@ -11,7 +11,7 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#f5f7fa;m
 .header h1{font-size:22px;margin-bottom:6px}
 .header p{font-size:13px;opacity:.85}
 .feedback-bar{position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.12);padding:8px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(4px)}
-.feedback-bar canvas{width:64px;height:64px;border-radius:6px}
+.feedback-bar img{width:64px;height:64px;border-radius:6px}
 .feedback-bar a{color:#fff;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap}
 .feedback-bar a:hover{text-decoration:underline}
 .grid{display:flex;flex-wrap:wrap;gap:16px;padding:20px;justify-content:center}
@@ -31,8 +31,8 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#f5f7fa;m
   <h1>EUGOOO 跨境分销平台 · 专属分享码 V7</h1>
   <p>共 21 人 · 扫码打开专属表单 · 推荐编码自动锁定 · 数据实时入库 · 2026-06-24 16:05</p>
   <div class="feedback-bar">
-    <canvas id="feedbackQr"></canvas>
     <a href="feedback.html">微信扫码<br>建议反馈</a>
+    <img src="qrcodes/feedback.png" alt="反馈">
   </div>
 </div>
 <div class="edit-area" style="display:none">
@@ -171,16 +171,5 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#f5f7fa;m
 
 </div>
 <div class="tip">每人独立二维码，扫码直达专属入驻表单 · 推荐人编码自动锁定不可修改 · 数据实时存入后台 · 管理员查看 <a href="https://hide-star.github.io/eugooo/admin.html" target="_blank">数据后台</a></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script>
-new QRCode(document.getElementById('feedbackQr'), {
-  text: 'https://hide-star.github.io/eugooo/feedback.html',
-  width: 64,
-  height: 64,
-  colorDark: '#1a73e8',
-  colorLight: '#ffffff',
-  correctLevel: QRCode.CorrectLevel.M
-});
-</script>
 </body>
 </html>

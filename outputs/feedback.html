@@ -105,22 +105,25 @@ function submitFeedback(){
     time: new Date().toLocaleString('zh-CN')
   };
 
-  fetch(FEEDBACK_URL, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(entry)
-  })
-    .then(function(r){
-      if(r.ok){
-        document.getElementById('successMsg').style.display = 'block';
-        document.getElementById('nickname').value = '';
-        document.getElementById('phone').value = '';
-        document.getElementById('email').value = '';
-        document.getElementById('suggestion').value = '';
-        document.getElementById('complaint').value = '';
-      } else {
-        document.getElementById('errorMsg').style.display = 'block';
-      }
+  fetch(FEEDBACK_URL + '?t=' + Date.now())
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(!Array.isArray(data)) data = [];
+      data.push(entry);
+      return fetch(FEEDBACK_URL, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(){
+      document.getElementById('successMsg').style.display = 'block';
+      document.getElementById('nickname').value = '';
+      document.getElementById('phone').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('suggestion').value = '';
+      document.getElementById('complaint').value = '';
     })
     .catch(function(){
       document.getElementById('errorMsg').style.display = 'block';
