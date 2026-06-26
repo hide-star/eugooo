@@ -141,7 +141,7 @@ function doLogout(){
 }
 
 function load(){
-  document.getElementById('tableArea').innerHTML = '<div class="empty">加载中...</div>';
+  document.getElementById('tableArea').innerHTML = '<div class="empty">\u52a0\u8f7d\u4e2d...</div>';
   fetch(FEEDBACK_URL + '?t=' + Date.now())
     .then(function(r){ return r.json(); })
     .then(function(d){
@@ -149,7 +149,7 @@ function load(){
       render();
     })
     .catch(function(){
-      document.getElementById('tableArea').innerHTML = '<div class="empty">加载失败，请检查网络或刷新重试<br><small>API: ' + FEEDBACK_URL + '</small></div>';
+      document.getElementById('tableArea').innerHTML = '<div class="empty">\u52a0\u8f7d\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u6216\u5237\u65b0\u91cd\u8bd5<br><small>API: ' + FEEDBACK_URL + '</small></div>';
     });
 }
 
@@ -335,7 +335,7 @@ function isAllSelected(){
 }
 
 function downloadCSV(){
-  var csv = '\uFEFF昵称,手机号,邮箱,建议,吐槽,时间\n';
+  var csv = '\uFEFF\u6635\u79f0,\u624b\u673a\u53f7,\u90ae\u7bb1,\u5efa\u8bae,\u5410\u69fd,\u65f6\u95f4\n';
   DATA.forEach(function(r){
     csv += [r.nickname||'', r.phone||'', r.email||'', r.suggestion||'', r.complaint||'', r.time||''].join(',') + '\n';
   });
@@ -347,7 +347,7 @@ function downloadCSV(){
 }
 
 function clearData(){
-  if(!confirm('确定要清空所有反馈数据？此操作不可撤销。')) return;
+  if(!confirm('\u786e\u5b9a\u8981\u6e05\u7a7a\u6240\u6709\u53cd\u9988\u6570\u636e\uff1f\u6b64\u64cd\u4f5c\u4e0d\u53ef\u64a4\u9500\u3002')) return;
   fetch(FEEDBACK_URL, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -355,13 +355,13 @@ function clearData(){
   })
     .then(function(r){
       if(r.ok){
-        alert('已清空');
+        alert('\u5df2\u6e05\u7a7a');
       } else {
-        alert('清空失败');
+        alert('\u6e05\u7a7a\u5931\u8d25');
       }
       load();
     })
-    .catch(function(){ alert('清空失败，请检查网络'); });
+    .catch(function(){ alert('\u6e05\u7a7a\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc'); });
 }
 
 checkAuth();

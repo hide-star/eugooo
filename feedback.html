@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EUGOOO · 建议与反馈</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#f5f7fa;min-height:100vh;color:#222}
+.header{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;text-align:center;padding:28px 20px}
+.header h1{font-size:22px;margin-bottom:6px}
+.header p{font-size:13px;opacity:.85}
+.container{max-width:480px;margin:24px auto;padding:0 16px}
+.card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card h2{font-size:18px;color:#1a73e8;margin-bottom:20px;text-align:center}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-size:13px;color:#555;margin-bottom:6px;font-weight:600}
+.form-group input,.form-group textarea{width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;outline:none;font-family:inherit}
+.form-group input:focus,.form-group textarea:focus{border-color:#1a73e8}
+.form-group textarea{min-height:100px;resize:vertical}
+.field-error{color:#e53935;font-size:12px;margin-top:4px;display:none}
+.char-count{text-align:right;font-size:12px;color:#999;margin-top:4px}
+.char-count.warn{color:#e53935}
+.label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.img-btn{background:#1a73e8;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;transition:background .2s}
+.img-btn:hover{background:#0d47a1}
+.img-btn:disabled{background:#ccc;cursor:not-allowed}
+.img-btn input{display:none}
+.textarea-wrapper{border:1px solid #ddd;border-radius:10px;padding:8px;transition:border-color .2s;background:#fff}
+.textarea-wrapper:focus-within{border-color:#1a73e8}
+.textarea-wrapper textarea{width:100%;border:none;border-radius:0;padding:6px 4px;font-size:14px;outline:none;font-family:inherit;resize:vertical;min-height:80px;background:transparent}
+.embedded-imgs{display:none;flex-wrap:wrap;gap:6px;padding:2px 4px 4px}
+.embedded-imgs .img-item{position:relative;width:60px;height:60px;border-radius:6px;overflow:hidden;border:1px solid #ddd;background:#fff}
+.embedded-imgs .img-item img{width:100%;height:100%;object-fit:cover;cursor:pointer;display:block}
+.embedded-imgs .img-item .remove-btn{position:absolute;top:1px;right:1px;width:16px;height:16px;background:rgba(0,0,0,.7);color:#fff;border:none;border-radius:50%;cursor:pointer;font-size:10px;line-height:16px;text-align:center;padding:0}
+.embedded-imgs .img-item.uploading{opacity:.6}
+.embedded-imgs .img-item .upload-status{position:absolute;bottom:0;left:0;right:0;height:3px;background:#ddd}
+.embedded-imgs .img-item .upload-status-bar{height:100%;background:#1a73e8;transition:width .3s}
+.img-tips{font-size:12px;color:#888;margin-top:4px;text-align:right}
+.img-error{color:#e53935;font-size:12px;margin-top:4px;text-align:center;display:none}
+.img-preview-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:9999}
+.img-preview-modal.active{display:flex}
+.img-preview-modal img{max-width:90%;max-height:90%;border-radius:8px}
+.img-preview-modal .close-btn{position:absolute;top:20px;right:20px;width:40px;height:40px;background:rgba(255,255,255,.9);border:none;border-radius:50%;font-size:24px;cursor:pointer}
+.btn-submit{width:100%;padding:14px;border:none;border-radius:10px;background:#1a73e8;color:#fff;font-size:15px;font-weight:600;cursor:pointer}
+.btn-submit:hover{background:#0d47a1}
+.btn-submit:disabled{background:#999;cursor:not-allowed}
+.tip{text-align:center;color:#888;font-size:12px;margin-top:16px}
+.success-msg{color:#4caf50;text-align:center;font-size:14px;margin-top:16px;display:none}
+.error-msg{color:#e53935;text-align:center;font-size:14px;margin-top:16px;display:none}
+.back-link{display:block;text-align:center;margin-top:20px;color:#1a73e8;font-size:14px;text-decoration:none}
+.back-link:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>EUGOOO 建议与反馈</h1>
+  <p>您的每一条建议都是我们进步的动力</p>
+</div>
+<div class="container">
+  <div class="card">
+    <h2>提交您的建议或吐槽</h2>
+    <div class="form-group">
+      <label>昵称</label>
+      <input type="text" id="nickname" placeholder="请输入您的昵称" oninput="validateNickname(this)" maxlength="50">
+      <div class="field-error" id="nicknameError">输入了特殊字符</div>
+    </div>
+    <div class="form-group">
+      <label>手机号</label>
+      <input type="tel" id="phone" placeholder="请输入您的手机号" oninput="validatePhoneField(this)" maxlength="11">
+      <div class="field-error" id="phoneError">手机号格式或位数不对</div>
+    </div>
+    <div class="form-group">
+      <label>邮箱</label>
+      <input type="email" id="email" placeholder="请输入您的邮箱" oninput="validateEmailField(this)">
+      <div class="field-error" id="emailError">邮箱格式不对</div>
+    </div>
+    <div class="form-group">
+      <div class="label-row">
+        <label style="margin-bottom:0">您的建议</label>
+        <button class="img-btn" id="sugBtn">上传图片</button>
+        <input type="file" id="imgInputSuggestion" accept=".jpg,.jpeg,.png" multiple style="display:none">
+      </div>
+      <div class="textarea-wrapper">
+        <div class="embedded-imgs" id="suggestionImgs"></div>
+        <textarea id="suggestion" placeholder="请描述您的建议..." maxlength="1000" oninput="updateCharCount('suggestion','suggestionCount',1000)" onfocus="setCurrentField('suggestion')"></textarea>
+      </div>
+      <div class="char-count" id="suggestionCount">0/1000</div>
+    </div>
+    <div class="form-group">
+      <div class="label-row">
+        <label style="margin-bottom:0">您的吐槽</label>
+        <button class="img-btn" id="comBtn">上传图片</button>
+        <input type="file" id="imgInputComplaint" accept=".jpg,.jpeg,.png" multiple style="display:none">
+      </div>
+      <div class="textarea-wrapper">
+        <div class="embedded-imgs" id="complaintImgs"></div>
+        <textarea id="complaint" placeholder="请描述您遇到的问题或不满意的地方..." maxlength="1000" oninput="updateCharCount('complaint','complaintCount',1000)" onfocus="setCurrentField('complaint')"></textarea>
+      </div>
+      <div class="char-count" id="complaintCount">0/1000</div>
+    </div>
+    <div class="img-tips" id="imgTips"></div>
+    <div class="img-error" id="imgError"></div>
+    <div class="img-preview-modal" id="previewModal" onclick="closePreview()">
+      <button class="close-btn">×</button>
+      <img id="previewImg" src="" alt="预览">
+    </div>
+    <button class="btn-submit" id="submitBtn" onclick="submitFeedback()">提交反馈</button>
+    <div class="success-msg" id="successMsg">提交成功，感谢您的反馈！</div>
+    <div class="error-msg" id="errorMsg">提交失败，请检查网络后重试。</div>
+    <div class="tip">管理员查看 <a href="feedback-admin.html" target="_blank">反馈管理后台</a></div>
+  </div>
+  <a class="back-link" href="index.html">← 返回首页</a>
+</div>
+
+<script>
+var FEEDBACK_URL = 'https://mantledb.sh/v2/eugooo/feedback';
+var IMG_URL = 'https://mantledb.sh/v2/eugooo/feedback-images';
+
+var MAX_IMG_COUNT = 9;
+var MAX_BATCH_COUNT = 3;
+var MAX_IMG_SIZE = 1 * 1024 * 1024;
+
+var currentField = 'suggestion';
+var suggestionImages = [];
+var complaintImages = [];
+
+function showImgError(msg){
+  var el = document.getElementById('imgError');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(function(){ el.style.display = 'none'; }, 3000);
+}
+
+function updateImgTips(){
+  var tips = document.getElementById('imgTips');
+  var total = suggestionImages.length + complaintImages.length;
+  if(total > 0){
+    tips.textContent = '已上传 ' + total + '/' + MAX_IMG_COUNT + ' 张图片';
+    tips.style.display = 'block';
+  } else {
+    tips.style.display = 'none';
+  }
+}
+
+function setCurrentField(field){
+  currentField = field;
+}
+
+function openPreview(src){
+  var modal = document.getElementById('previewModal');
+  var img = document.getElementById('previewImg');
+  img.src = src;
+  modal.classList.add('active');
+}
+
+function closePreview(){
+  var modal = document.getElementById('previewModal');
+  modal.classList.remove('active');
+}
+
+function renderEmbeddedImgs(field){
+  var imgs = field === 'suggestion' ? suggestionImages : complaintImages;
+  var container = document.getElementById(field + 'Imgs');
+  if(imgs.length === 0){
+    container.innerHTML = '';
+    container.style.display = 'none';
+    return;
+  }
+  container.style.display = 'flex';
+  container.innerHTML = imgs.map(function(img, i){
+    return '<div class="img-item' + (img.uploading ? ' uploading' : '') + '" data-field="' + field + '">' +
+      '<img src="' + img.data + '" alt="图片' + (i+1) + '" onclick="openPreview(\'' + img.data + '\')">' +
+      '<button class="remove-btn" onclick="removeImg(\'' + field + '\',' + i + ')">×</button>' +
+      (img.uploading ? '<div class="upload-status"><div class="upload-status-bar" style="width:' + img.progress + '%"></div></div>' : '') +
+      '</div>';
+  }).join('');
+}
+
+function removeImg(field, index){
+  var imgs = field === 'suggestion' ? suggestionImages : complaintImages;
+  imgs.splice(index, 1);
+  renderEmbeddedImgs(field);
+  updateImgTips();
+}
+
+function checkEmbeddedContent(arrayBuffer, filename){
+  var bytes = new Uint8Array(arrayBuffer);
+  var header = String.fromCharCode.apply(null, bytes.slice(0, 8));
+  if(header.indexOf('<script') !== -1 || header.indexOf('javascript:') !== -1 ||
+     header.indexOf('<iframe') !== -1 || header.indexOf('onerror=') !== -1 ||
+     header.indexOf('onload=') !== -1 || header.indexOf('<object') !== -1 ||
+     header.indexOf('<embed') !== -1 || header.indexOf('<link') !== -1 ||
+     header.indexOf('<style') !== -1){
+    return true;
+  }
+  var header2 = String.fromCharCode.apply(null, bytes.slice(0, 20));
+  if(/\/(script|javascript)/.test(header2) || /data:(?!image\/(jpeg|png))/.test(header2)){
+    return true;
+  }
+  if(filename.toLowerCase().endsWith('.jpg') || filename.toLowerCase().endsWith('.jpeg')){
+    if(bytes[0] !== 0xFF || bytes[1] !== 0xD8){
+      return true;
+    }
+  } else if(filename.toLowerCase().endsWith('.png')){
+    if(bytes[0] !== 0x89 || bytes[1] !== 0x50 || bytes[2] !== 0x4E || bytes[3] !== 0x47){
+      return true;
+    }
+  }
+  return false;
+}
+
+function processImageFile(file, callback){
+  var arrayReader = new FileReader();
+  arrayReader.onload = function(e){
+    var arrayBuffer = e.target.result;
+    if(checkEmbeddedContent(arrayBuffer, file.name)){
+      callback('图片包含可疑内容，已拒绝');
+      return;
+    }
+    if(file.size > MAX_IMG_SIZE){
+      callback('图片超过1MB大小限制');
+      return;
+    }
+    var blob = new Blob([arrayBuffer], {type: file.type});
+    var url = URL.createObjectURL(blob);
+    var img = new Image();
+    img.onload = function(){
+      URL.revokeObjectURL(url);
+      var canvas = document.createElement('canvas');
+      var maxW = 1920, maxH = 1920;
+      var w = img.width, h = img.height;
+      if(w > maxW || h > maxH){
+        if(w/h > maxW/maxH){
+          h = Math.round(h * maxW / w);
+          w = maxW;
+        } else {
+          w = Math.round(w * maxH / h);
+          h = maxH;
+        }
+      }
+      canvas.width = w;
+      canvas.height = h;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      var ext = file.name.toLowerCase().endsWith('.png') ? 'png' : 'jpeg';
+      var data = canvas.toDataURL('image/'+ext, 0.85);
+      callback(null, data);
+    };
+    img.onerror = function(){
+      URL.revokeObjectURL(url);
+      callback('图片解析失败');
+    };
+    img.src = url;
+  };
+  arrayReader.onerror = function(){
+    callback('文件读取失败');
+  };
+  arrayReader.readAsArrayBuffer(file);
+}
+
+function handleImgSelect(files, field){
+  if(!files || files.length === 0) return;
+  var fileArray = Array.from(files);
+  if(fileArray.length > MAX_BATCH_COUNT){
+    showImgError('一次最多上传'+MAX_BATCH_COUNT+'张图片');
+    return;
+  }
+  var totalImages = suggestionImages.length + complaintImages.length;
+  if(totalImages + fileArray.length > MAX_IMG_COUNT){
+    showImgError('最多只能上传'+MAX_IMG_COUNT+'张图片');
+    return;
+  }
+  var targetImgs = field === 'suggestion' ? suggestionImages : complaintImages;
+  var pending = fileArray.length;
+  var errors = [];
+  fileArray.forEach(function(file, idx){
+    var ext = file.name.toLowerCase();
+    if(!ext.endsWith('.jpg') && !ext.endsWith('.jpeg') && !ext.endsWith('.png')){
+      errors.push('"'+file.name+'"不是JPG/PNG格式');
+      pending--;
+      return;
+    }
+    processImageFile(file, function(err, data){
+      pending--;
+      if(err){
+        errors.push('"'+file.name+'": '+err);
+      } else {
+        targetImgs.push({data: data, uploading: false, progress: 100, name: file.name});
+        renderEmbeddedImgs(field);
+        updateImgTips();
+      }
+      if(pending === 0 && errors.length > 0){
+        showImgError(errors.join('；'));
+      }
+    });
+  });
+}
+
+document.getElementById('sugBtn').addEventListener('click', function(){
+  document.getElementById('imgInputSuggestion').click();
+});
+document.getElementById('imgInputSuggestion').addEventListener('change', function(){
+  handleImgSelect(this.files, 'suggestion');
+  this.value = '';
+});
+document.getElementById('comBtn').addEventListener('click', function(){
+  document.getElementById('imgInputComplaint').click();
+});
+document.getElementById('imgInputComplaint').addEventListener('change', function(){
+  handleImgSelect(this.files, 'complaint');
+  this.value = '';
+});
+
+var NICKNAME_INVALID_REGEX = /[\u0000-\u001F\u007F\s\\\/<>\"'`;(){}\[\]|&$%#@!^*+=~`]/;
+
+function showError(id){
+  var el = document.getElementById(id);
+  if(el) el.style.display = 'block';
+}
+
+function hideError(id){
+  var el = document.getElementById(id);
+  if(el) el.style.display = 'none';
+}
+
+function validateNickname(el){
+  var val = el.value;
+  var char = val.match(/[\u0000-\u001F\u007F\s\\\/<>\"'`;(){}\[\]|&$%#@!^*+=~`]/);
+  if(char){
+    var ch = char[0];
+    var desc = ch === ' ' ? '空格'
+      : ch === '\t' ? '制表符'
+      : ch === '\n' ? '换行符'
+      : ch === '\r' ? '回车符'
+      : ch === '\\' ? '反斜杠'
+      : ch === '/' ? '斜杠'
+      : ch === '<' ? '尖括号'
+      : ch === '>' ? '尖括号'
+      : ch === '"' ? '双引号'
+      : ch === "'" ? '单引号'
+      : ch === '`' ? '反引号'
+      : ch === ';' ? '分号'
+      : ch === '(' ? '括号'
+      : ch === ')' ? '括号'
+      : ch === '{' ? '括号'
+      : ch === '}' ? '括号'
+      : ch === '[' ? '括号'
+      : ch === ']' ? '括号'
+      : ch === '|' ? '竖线'
+      : ch === '&' ? '和号'
+      : ch === '$' ? '美元符'
+      : ch === '%' ? '百分号'
+      : ch === '#' ? '井号'
+      : ch === '@' ? '艾特符'
+      : ch === '!' ? '感叹号'
+      : ch === '^' ? '脱字符'
+      : ch === '*' ? '星号'
+      : ch === '+' ? '加号'
+      : ch === '=' ? '等号'
+      : ch === '~' ? '波浪号'
+      : '特殊字符';
+    document.getElementById('nicknameError').textContent = '输入了' + desc;
+    showError('nicknameError');
+  } else if(val.length > 50){
+    document.getElementById('nicknameError').textContent = '昵称不能超过50个字符';
+    showError('nicknameError');
+  } else {
+    document.getElementById('nicknameError').textContent = '输入了特殊字符';
+    hideError('nicknameError');
+  }
+}
+
+function validatePhoneField(el){
+  var val = el.value.replace(/\D/g, '');
+  el.value = val;
+  if(val && /[^0-9]/.test(document.getElementById('phone').value)){
+    document.getElementById('phoneError').textContent = '格式不对';
+    showError('phoneError');
+  } else if(val && val.length !== 11){
+    document.getElementById('phoneError').textContent = '位数不对';
+    showError('phoneError');
+  } else {
+    hideError('phoneError');
+  }
+}
+
+function validateEmailField(el){
+  var val = el.value.trim();
+  if(val && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(val)){
+    showError('emailError');
+  } else {
+    hideError('emailError');
+  }
+}
+
+function updateCharCount(textareaId, countId, maxLen){
+  var el = document.getElementById(textareaId);
+  var countEl = document.getElementById(countId);
+  var len = el.value.length;
+  countEl.textContent = len + '/' + maxLen;
+  if(len >= maxLen * 0.9){
+    countEl.classList.add('warn');
+  } else {
+    countEl.classList.remove('warn');
+  }
+}
+
+function validatePhone(phone){
+  return /^1[3-9]\d{9}$/.test(phone);
+}
+
+function validateEmail(email){
+  return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+}
+
+function submitFeedback(){
+  var nicknameInput = document.getElementById('nickname');
+  var nickname = nicknameInput.value.trim();
+  var phone = document.getElementById('phone').value.trim();
+  var email = document.getElementById('email').value.trim();
+  var suggestion = document.getElementById('suggestion').value.trim();
+  var complaint = document.getElementById('complaint').value.trim();
+
+  if(!nickname){
+    alert('请输入昵称');
+    document.getElementById('nickname').focus();
+    return;
+  }
+  if(NICKNAME_INVALID_REGEX.test(nicknameInput.value)){
+    alert('昵称不能包含特殊字符');
+    document.getElementById('nickname').focus();
+    return;
+  }
+  if(nickname.length > 50){
+    alert('昵称不能超过50个字符');
+    document.getElementById('nickname').focus();
+    return;
+  }
+  if(!phone){
+    alert('请输入手机号');
+    document.getElementById('phone').focus();
+    return;
+  }
+  if(!validatePhone(phone)){
+    alert('请输入正确的11位手机号');
+    document.getElementById('phone').focus();
+    return;
+  }
+  if(email && !validateEmail(email)){
+    alert('请输入正确的邮箱格式');
+    document.getElementById('email').focus();
+    return;
+  }
+  if(suggestion.length > 1000){
+    alert('建议内容不能超过1000字');
+    document.getElementById('suggestion').focus();
+    return;
+  }
+  if(complaint.length > 1000){
+    alert('吐槽内容不能超过1000字');
+    document.getElementById('complaint').focus();
+    return;
+  }
+  if(!suggestion && !complaint){
+    alert('请至少填写建议或吐槽其中一项');
+    document.getElementById('suggestion').focus();
+    return;
+  }
+
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '提交中...';
+  document.getElementById('successMsg').style.display = 'none';
+  document.getElementById('errorMsg').style.display = 'none';
+
+  var entry = {
+    nickname: nickname,
+    phone: phone,
+    email: email,
+    suggestion: suggestion,
+    complaint: complaint,
+    suggestionImages: suggestionImages.map(function(img){ return img.data; }),
+    complaintImages: complaintImages.map(function(img){ return img.data; }),
+    time: new Date().toLocaleString('zh-CN')
+  };
+
+  fetch(FEEDBACK_URL + '?t=' + Date.now())
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(!Array.isArray(data)) data = [];
+      data.push(entry);
+      return fetch(FEEDBACK_URL, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(){
+      document.getElementById('successMsg').style.display = 'block';
+      document.getElementById('nickname').value = '';
+      document.getElementById('phone').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('suggestion').value = '';
+      document.getElementById('complaint').value = '';
+      suggestionImages = [];
+      complaintImages = [];
+      renderEmbeddedImgs('suggestion');
+      renderEmbeddedImgs('complaint');
+      updateImgTips();
+      document.getElementById('imgInputSuggestion').value = '';
+      document.getElementById('imgInputComplaint').value = '';
+      hideError('nicknameError');
+      hideError('phoneError');
+      hideError('emailError');
+      updateCharCount('suggestion','suggestionCount',1000);
+      updateCharCount('complaint','complaintCount',1000);
+    })
+    .catch(function(){
+      document.getElementById('errorMsg').style.display = 'block';
+    })
+    .finally(function(){
+      btn.disabled = false;
+      btn.textContent = '提交反馈';
+    });
+}
+</script>
+</body>
+</html>
